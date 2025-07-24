@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/The_Movie_teste_tecnico.iml" filepath="$PROJECT_DIR$/.idea/The_Movie_teste_tecnico.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/the_movie_teste_tecnico_android.iml" filepath="$PROJECT_DIR$/android/the_movie_teste_tecnico_android.iml" />
+    </modules>
+  </component>
+</project>
