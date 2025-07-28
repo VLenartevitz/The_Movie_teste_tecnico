@@ -9,7 +9,8 @@ class MovieController extends AsyncNotifier<List<Movie>> {
   @override
   Future<List<Movie>> build() async {
     _repository = ref.read(movieRepositoryProvider);
-    return _repository.getMovies();
+    // return _repository.getMovies();
+      return [];
   }
 
   Future<void> getMovies() async {
@@ -21,4 +22,21 @@ class MovieController extends AsyncNotifier<List<Movie>> {
       state = AsyncError(e, st);
     }
   }
+
+
+  Future<void> searchMovies(String query) async {
+    if (query.trim().isEmpty) {
+      state = const AsyncData([]); // limpa a tela
+      return;
+    }
+
+    state = const AsyncLoading();
+    try {
+      final results = await _repository.searchMovies(query);
+      state = AsyncData(results);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+
 }

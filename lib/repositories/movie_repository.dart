@@ -19,7 +19,9 @@ class MovieRepository {
   }
 
   Future<List<Movie>> searchMovies(String query) async {
-    final response = await http.get(Uri.parse('$_baseUrl/search/movie?api_key=$_apiKey&language=pt-BR&query=$query'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/search/movie?api_key=$_apiKey&language=pt-BR&query=$query'),
+    );
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);

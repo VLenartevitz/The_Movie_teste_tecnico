@@ -4,12 +4,13 @@ import 'package:the_movie_teste_tecnico/modules/home/widgets/movie_card.dart';
 import 'package:the_movie_teste_tecnico/providers/app_provider.dart';
 import 'package:the_movie_teste_tecnico/shared/components/navigation.dart';
 
-class HomePage extends ConsumerStatefulWidget  {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
@@ -46,11 +47,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ...movies.map((movie) => MovieCard(
-                    title: movie.title,
-                    duration: 'Duração não disponível', // ou use se tiver no model
-                    rating: (movie.voteAverage * 10).toInt(),
-                  )),
+                  ...movies.map(
+                    (movie) => MovieCard(
+                      title: movie.title,
+                      duration:
+                          'Duração não disponível', // ou use se tiver no model
+                      rating: (movie.voteAverage * 10).toInt(),
+                    ),
+                  ),
                 ],
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -64,10 +68,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
 
           // Navegação flutuante
-          const Navigation(activeTab: NavigationTab.home),
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: Navigation(activeTab: NavigationTab.home),
+          ),
         ],
       ),
     );
   }
-
 }
