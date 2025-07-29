@@ -26,7 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final movieState = ref.watch(movieControllerProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color.fromARGB(26, 26, 26, 1),
       body: Stack(
         children: [
           Padding(
@@ -71,7 +71,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           const Positioned(
             left: 0,
             right: 0,
-            bottom: 16,
+            bottom: 26,
             child: Navigation(activeTab: NavigationTab.home),
           ),
         ],

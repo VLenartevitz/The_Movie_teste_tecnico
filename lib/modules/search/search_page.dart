@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:the_movie_teste_tecnico/models/movie_model.dart';
 import 'package:the_movie_teste_tecnico/providers/app_provider.dart';
 import 'package:the_movie_teste_tecnico/shared/components/navigation.dart';
 
@@ -19,7 +18,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     final movieState = ref.watch(movieControllerProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color.fromARGB(26, 26, 26, 1),
       body: Stack(
         children: [
           Padding(
@@ -38,7 +37,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 const SizedBox(height: 24),
                 SearchBar(
                   controller: _searchController,
-                  hintText: 'Digite o nome do filme...',
+                  hintText: 'Buscar filmes',
                   backgroundColor: WidgetStateProperty.all(const Color(0xFF2C2C2E)),
                   hintStyle: WidgetStateProperty.all(TextStyle(color: Colors.grey[400])),
                   textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.white)),
@@ -69,25 +68,50 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
                       return ListView.separated(
                         itemCount: movies.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final movie = movies[index];
-                          return Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2C2C2E),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              movie.title,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        },
+                          separatorBuilder: (_, __) => const Divider(
+                            color: Colors.white24,
+                            thickness: 0.4,
+                            height: 16,
+                            indent: 4,
+                            endIndent: 4,
+                          ),
+
+                          itemBuilder: (context, index) {
+                            final movie = movies[index];
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Poster do filme
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    'https://image.tmdb.org/t/p/w92${movie.posterPath}',
+                                    width: 32,
+                                    height: 32,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Container(
+                                      width: 32,
+                                      height: 32,
+                                      color: Colors.grey[800],
+                                      child: const Icon(Icons.broken_image, color: Colors.white54),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                // Título
+                                Expanded(
+                                  child: Text(
+                                    movie.title,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
                       );
                     },
                     loading: () => const Center(child: CircularProgressIndicator()),
@@ -105,7 +129,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           const Positioned(
             left: 0,
             right: 0,
-            bottom: 16,
+            bottom: 26,
             child: Navigation(activeTab: NavigationTab.search),
           ),
         ],

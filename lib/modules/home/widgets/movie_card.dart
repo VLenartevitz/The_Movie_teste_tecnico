@@ -18,7 +18,7 @@ class MovieCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: const Color(0xFF2C2C2E),
+        color: const Color.fromARGB(255, 46, 52, 64), // 100% opaco
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -59,11 +59,13 @@ class MovieCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            width: 40, // Largura fixa
+            height: 40, // Altura igual à largura → quadrado
             decoration: BoxDecoration(
               color: Colors.blue.shade700,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(12), // Canto arredondado, mas não uma pílula
             ),
+            alignment: Alignment.center, // Centraliza o conteúdo
             child: Text(
               rating.toString(),
               style: const TextStyle(
@@ -71,7 +73,8 @@ class MovieCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          )
+          ),
+
         ],
       ),
     );
