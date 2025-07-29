@@ -1,3 +1,4 @@
+import 'dart:io'; // para detectar SocketException
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_movie_teste_tecnico/providers/app_provider.dart';
@@ -42,15 +43,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     hintText: 'Buscar filmes',
                     backgroundColor:
                     WidgetStateProperty.all(const Color(0xFF2C2C2E)),
-                    hintStyle: WidgetStateProperty.all(
-                        TextStyle(color: Colors.grey[400])),
-                    textStyle: WidgetStateProperty.all(
-                        const TextStyle(color: Colors.white)),
+                    hintStyle:
+                    WidgetStateProperty.all(TextStyle(color: Colors.grey[400])),
+                    textStyle:
+                    WidgetStateProperty.all(const TextStyle(color: Colors.white)),
                     leading: const Icon(Icons.search, color: Colors.white70),
                     onSubmitted: (String value) {
-                      ref
-                          .read(movieControllerProvider.notifier)
-                          .searchMovies(value);
+                      ref.read(movieControllerProvider.notifier).searchMovies(value);
                       FocusScope.of(context).unfocus();
                     },
                   ),
@@ -125,12 +124,27 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       },
                       loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                      error: (error, _) => Center(
-                        child: Text(
-                          'Erro ao buscar filmes: $error',
-                          style: const TextStyle(color: Colors.redAccent),
-                        ),
-                      ),
+                      error: (error, _) {
+                        final isNoInternet = error is SocketException;
+
+                        final errorMessage = isNoInternet
+                            ? 'Sem conexão com a internet.\nPor favor, verifique sua rede e tente novamente.'
+                            : 'Erro ao buscar filmes: $error';
+
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              errorMessage,
+                              style: const TextStyle(
+                                color: Colors.redAccent,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
