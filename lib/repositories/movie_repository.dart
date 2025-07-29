@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_movie_teste_tecnico/models/movie_model.dart';
 
 class MovieRepository {
-  final String _apiKey = 'c2332f209848a5db0a72d8961c8d6ee8';
+  final String _apiKey = dotenv.env['TMDB_API_KEY']!;
   final String _baseUrl = 'https://api.themoviedb.org/3';
 
   Future<List<Movie>> getMovies() async {
