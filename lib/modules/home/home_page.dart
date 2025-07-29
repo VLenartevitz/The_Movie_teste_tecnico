@@ -15,7 +15,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Chama o controller assim que a tela for carregada
     Future.microtask(() {
       ref.read(movieControllerProvider.notifier).getMovies();
     });
@@ -27,54 +26,96 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(26, 26, 26, 1),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 80),
-            child: movieState.when(
-              data: (movies) => ListView(
-                padding: const EdgeInsets.only(top: 40, bottom: 80),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      'Filmes Populares',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            movieState.when(
+              data: (movies) =>
+                  ListView(
+                    padding: const EdgeInsets.only(top: 24),
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Filmes Populares',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  ...movies.map(
-                    (movie) => MovieCard(
-                      title: movie.title,
-                      duration:
-                          'Duração não disponível', // ou use se tiver no model
-                      rating: (movie.voteAverage * 10).toInt(),
-                    ),
-                  ),
-                ],
-              ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(
-                child: Text(
-                  'Erro ao carregar filmes: $err',
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
-            ),
-          ),
+                      const SizedBox(height: 16),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isWide = constraints.maxWidth > 600;
 
-          // Navegação flutuante
-          const Positioned(
-            left: 0,
-            right: 0,
-            bottom: 26,
-            child: Navigation(activeTab: NavigationTab.home),
-          ),
-        ],
+                          if (isWide) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: movies.length,
+                                gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16,
+                                  childAspectRatio: 3.5,
+                                ),
+                                itemBuilder: (context, index) {
+                                  final movie = movies[index];
+                                  return MovieCard(
+                                    title: movie.title,
+                                    rating: (movie.voteAverage * 10).toInt(),
+                                    posterPath: movie.posterPath,
+                                  );
+                                },
+                              ),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                ...movies.map((movie) =>
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 2),
+                                      child: MovieCard(
+                                        title: movie.title,
+                                        rating: (movie.voteAverage * 10)
+                                            .toInt(), posterPath:movie.posterPath,
+                                      ),
+                                    )),
+                                const SizedBox(height: 100),
+                                // espaço extra no fim
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) =>
+                  Center(
+                    child: Text(
+                      'Erro ao carregar filmes: $err',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+            ),
+
+            // Navigation flutuando sobre o conteúdo
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 26,
+              child: Navigation(activeTab: NavigationTab.home),
+            ),
+          ],
+        ),
       ),
     );
   }

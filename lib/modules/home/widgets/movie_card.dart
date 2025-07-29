@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class MovieCard extends StatelessWidget {
   final String title;
-  final String duration;
   final int rating;
+  final String posterPath;
 
   const MovieCard({
     super.key,
     required this.title,
-    required this.duration,
     required this.rating,
+    required this.posterPath
   });
 
   @override
@@ -23,15 +23,21 @@ class MovieCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 50,
-            height: 75,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade800,
-              borderRadius: BorderRadius.circular(8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              'https://image.tmdb.org/t/p/w92$posterPath',
+              width: 50,
+              height: 56,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: 60,
+                height: 90,
+                color: Colors.grey.shade800,
+                child: const Icon(Icons.broken_image, color: Colors.white54),
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
+          ),          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,18 +49,11 @@ class MovieCard extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.schedule, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      duration,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
+
               ],
             ),
           ),
